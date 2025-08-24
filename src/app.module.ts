@@ -1,20 +1,12 @@
-// import { Module } from '@nestjs/common';
-// import { AppController } from './app.controller';
-// import { AppService } from './app.service';
-
-// @Module({
-//   imports: [],
-//   controllers: [AppController],
-//   providers: [AppService],
-// })
-// export class AppModule {}
-
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { ConfigModule } from '@nestjs/config';
+import { MulterModule } from '@nestjs/platform-express';
 import { User } from './models/user.model';
 import { AuthModule } from './modules/auth/auth.module';
 import { BoardModule } from './modules/board/board.module';
+import { ListModule } from './modules/list/list.module'; 
+import { CardModule } from './modules/card/card.module';
 
 @Module({
   imports: [
@@ -27,8 +19,13 @@ import { BoardModule } from './modules/board/board.module';
       synchronize: true,
     }),
     SequelizeModule.forFeature([User]),
+    MulterModule.register({
+      dest: './uploads', // local folder for uploads
+    }),
     AuthModule,
     BoardModule,
+    ListModule, 
+    CardModule,
   ],
 })
 export class AppModule {}

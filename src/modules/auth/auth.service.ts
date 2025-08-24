@@ -5,12 +5,15 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { sendVerificationEmail, sendPasswordResetEmail } from 'src/utils/email.service';
 import { CompleteProfileDto } from './dto/complete-profile.dto';
+import { ConfigService } from '@nestjs/config';
+
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectModel(User) private userModel: typeof User,
     private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
 
   async register(email: string, password: string) {
@@ -31,7 +34,8 @@ export class AuthService {
       { expiresIn: '24h' },
     );
     
-    const verifyUrl = `http://localhost:3000/auth/verify-email?token=${token}`;
+    const baseUrl = this.configService.get('BASE_URL');
+    const verifyUrl = `${baseUrl}/auth/verify-email?token=${token}`;
     
     await sendVerificationEmail(email, verifyUrl);
     return { email, message: 'Verification link sent to email' };
@@ -46,14 +50,9 @@ export class AuthService {
     if (!user) throw new BadRequestException('User not found');
     if (user.isVerified) return { message: 'Already verified' };
 
-    // console.log('BEFORE:', user.toJSON());
-    // console.log(Object.keys(user.toJSON())); // should include 'isVerified'
-
-
     await user.update({ isVerified: true });
 
     const reloaded = await this.userModel.findOne({ where: { email } });
-    // console.log('AFTER:', reloaded?.toJSON());
 
     return { message: 'Email verified. You can now log in.' };
   } catch (err) {
@@ -123,7 +122,9 @@ export class AuthService {
         if (user.isVerified) return { message: 'User already verified' };
       
         const token = this.jwtService.sign({ email }, { expiresIn: '24h' });
-        const verifyUrl = `http://localhost:3000/auth/verify-email?token=${token}`;
+        
+        const baseUrl = this.configService.get('BASE_URL');
+        const verifyUrl = `${baseUrl}/auth/verify-email?token=${token}`;
       
         await sendVerificationEmail(email, verifyUrl);
         return { email, message: 'Verification email resent' };
@@ -134,7 +135,8 @@ export class AuthService {
         if (!user) throw new BadRequestException('User not found');
       
         const token = this.jwtService.sign({ email }, { expiresIn: '15m' });
-        const resetUrl = `http://localhost:3000/auth/reset-password?token=${token}`;
+        const baseUrl = this.configService.get('BASE_URL');
+        const resetUrl = `${baseUrl}/auth/reset-password?token=${token}`;
       
         await sendPasswordResetEmail(email, resetUrl); 
         return { message: 'Reset password link sent' };
