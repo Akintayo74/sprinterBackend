@@ -53,8 +53,13 @@ export class AuthService {
     await user.update({ isVerified: true });
 
     const reloaded = await this.userModel.findOne({ where: { email } });
+    
+    const accessToken = this.jwtService.sign({ sub: user.id, email: user.email });
 
-    return { message: 'Email verified. You can now log in.' };
+    return {
+      message: 'Email verified. Please complete your profile.',
+      access_token: accessToken
+    };
   } catch (err) {
     console.error(err);
     throw new BadRequestException('Invalid or expired verification link');
