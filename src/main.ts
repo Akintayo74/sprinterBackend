@@ -10,6 +10,7 @@ async function bootstrap() {
   // get config service after app is created
   const configService = app.get(ConfigService);
   const frontendUrl = configService.get<string>('FRONTEND_URL');
+  console.log('FRONTEND_URL:', frontendUrl);
 
   app.enableCors({
     origin: [frontendUrl, 'https://your-frontend.com'], // allowed origins
