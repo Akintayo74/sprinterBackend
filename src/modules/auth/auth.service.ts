@@ -34,8 +34,8 @@ export class AuthService {
       { expiresIn: '24h' },
     );
     
-    const baseUrl = this.configService.get('BASE_URL');
-    const verifyUrl = `${baseUrl}/auth/verify-email?token=${token}`;
+    const baseUrl = this.configService.get('FRONTEND_URL');
+    const verifyUrl = `${baseUrl}/verify-email?token=${token}`;
     
     await sendVerificationEmail(email, verifyUrl);
     return { email, message: 'Verification link sent to email' };
@@ -128,8 +128,8 @@ export class AuthService {
       
         const token = this.jwtService.sign({ email }, { expiresIn: '24h' });
         
-        const baseUrl = this.configService.get('BASE_URL');
-        const verifyUrl = `${baseUrl}/auth/verify-email?token=${token}`;
+        const baseUrl = this.configService.get('FRONTEND_URL');
+        const verifyUrl = `${baseUrl}/verify-email?token=${token}`;
       
         await sendVerificationEmail(email, verifyUrl);
         return { email, message: 'Verification email resent' };
@@ -140,7 +140,7 @@ export class AuthService {
         if (!user) throw new BadRequestException('User not found');
       
         const token = this.jwtService.sign({ email }, { expiresIn: '15m' });
-        const baseUrl = this.configService.get('BASE_URL');
+        const baseUrl = this.configService.get('FRONTEND_URL');
         const resetUrl = `${baseUrl}/auth/reset-password?token=${token}`;
       
         await sendPasswordResetEmail(email, resetUrl); 
