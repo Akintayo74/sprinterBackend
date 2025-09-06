@@ -141,7 +141,7 @@ export class AuthService {
       
         const token = this.jwtService.sign({ email }, { expiresIn: '15m' });
         const baseUrl = this.configService.get('FRONTEND_URL');
-        const resetUrl = `${baseUrl}/auth/reset-password?token=${token}`;
+        const resetUrl = `${baseUrl}/forgot-password/reset?token=${token}`;
       
         await sendPasswordResetEmail(email, resetUrl); 
         return { message: 'Reset password link sent' };
