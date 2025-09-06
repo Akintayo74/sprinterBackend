@@ -1,0 +1,82 @@
+.
+├── ./dev.sqlite
+├── ./.env
+├── ./eslint.config.mjs
+├── ./.gitignore
+├── ./nest-cli.json
+├── ./package.json
+├── ./package-lock.json
+├── ./.prettierrc
+├── ./README.md
+├── ./src
+│   ├── ./src/app.controller.spec.ts
+│   ├── ./src/app.controller.ts
+│   ├── ./src/app.module.ts
+│   ├── ./src/app.service.ts
+│   ├── ./src/common
+│   │   ├── ./src/common/guards
+│   │   │   └── ./src/common/guards/jwt-auth.guard.ts
+│   │   └── ./src/common/strategies
+│   │       └── ./src/common/strategies/jwt.strategy.ts
+│   ├── ./src/config
+│   │   └── ./src/config/database.config.ts
+│   ├── ./src/main.ts
+│   ├── ./src/models
+│   │   ├── ./src/models/board-member.model.ts
+│   │   ├── ./src/models/board.model.ts
+│   │   ├── ./src/models/card.model.ts
+│   │   ├── ./src/models/comment.model.ts
+│   │   ├── ./src/models/list.model.ts
+│   │   ├── ./src/models/user.model.ts
+│   │   └── ./src/models/voice-note.model.ts
+│   ├── ./src/modules
+│   │   ├── ./src/modules/auth
+│   │   │   ├── ./src/modules/auth/auth.controller.ts
+│   │   │   ├── ./src/modules/auth/auth.module.ts
+│   │   │   ├── ./src/modules/auth/auth.service.ts
+│   │   │   └── ./src/modules/auth/dto
+│   │   │       ├── ./src/modules/auth/dto/complete-profile.dto.ts
+│   │   │       ├── ./src/modules/auth/dto/forgot-password.dto.ts
+│   │   │       ├── ./src/modules/auth/dto/login.dto.ts
+│   │   │       ├── ./src/modules/auth/dto/register.dto.ts
+│   │   │       ├── ./src/modules/auth/dto/resend-verification.dto.ts
+│   │   │       ├── ./src/modules/auth/dto/reset-password.dto.ts
+│   │   │       └── ./src/modules/auth/dto/verify-email.dto.ts
+│   │   ├── ./src/modules/board
+│   │   │   ├── ./src/modules/board/board.controller.ts
+│   │   │   ├── ./src/modules/board/board.module.ts
+│   │   │   ├── ./src/modules/board/board.service.ts
+│   │   │   └── ./src/modules/board/dto
+│   │   │       ├── ./src/modules/board/dto/add-board-member.dto.ts
+│   │   │       ├── ./src/modules/board/dto/create-board.dto.ts
+│   │   │       ├── ./src/modules/board/dto/create-comment.dto.ts
+│   │   │       └── ./src/modules/board/dto/update-board.dto.ts
+│   │   ├── ./src/modules/card
+│   │   │   ├── ./src/modules/card/card.controller.ts
+│   │   │   ├── ./src/modules/card/card.module.ts
+│   │   │   ├── ./src/modules/card/card.service.ts
+│   │   │   └── ./src/modules/card/dto
+│   │   │       ├── ./src/modules/card/dto/create-card.dto.ts
+│   │   │       ├── ./src/modules/card/dto/update-card.dto.ts
+│   │   │       └── ./src/modules/card/dto/update-checklist.dto.ts
+│   │   ├── ./src/modules/list
+│   │   │   ├── ./src/modules/list/dto
+│   │   │   │   ├── ./src/modules/list/dto/create-list.dto.ts
+│   │   │   │   └── ./src/modules/list/dto/update-list.dto.ts
+│   │   │   ├── ./src/modules/list/list.controller.ts
+│   │   │   ├── ./src/modules/list/list.module.ts
+│   │   │   └── ./src/modules/list/list.service.ts
+│   │   └── ./src/modules/voice-note
+│   │       ├── ./src/modules/voice-note/dto
+│   │       │   └── ./src/modules/voice-note/dto/upload-voice-note.dto.ts
+│   │       ├── ./src/modules/voice-note/voice-note.controller.ts
+│   │       └── ./src/modules/voice-note/voice-note.service.ts
+│   └── ./src/utils
+│       └── ./src/utils/email.service.ts
+├── ./structure.txt
+├── ./test
+│   └── ./test/app.e2e-spec.ts
+├── ./tsconfig.build.json
+└── ./tsconfig.json
+
+20 directories, 60 files
