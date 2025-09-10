@@ -21,7 +21,7 @@ export class VoiceNoteService {
     @InjectModel(VoiceNote) private voiceNoteRepo: typeof VoiceNote,
     private supabaseService: SupabaseService,
   ) {}
-  
+
   async userHasAccess(cardId: number, userId: number): Promise<boolean> {
     const card = await this.cardModel.findByPk(cardId, { include: ['list'] });
     if (!card) return false;
@@ -55,29 +55,28 @@ export class VoiceNoteService {
     if (!notes) throw new NotFoundException('No voice notes found');
 
     // const jsonNotes = notes.map(note => {
-    //   const noteUser = note?.user; 
+    //   const noteUser = note?.user;
     //   const noteUserWithoutPassword = { ...noteUser };
     //   return { ...note.toJSON(), user: noteUserWithoutPassword };
-    // }); 
+    // });
     // this.logger.debug('Finding all notes2: ', jsonNotes);
 
-    
-  const withUrls = await Promise.all(
-    notes.map(async (note) => {
-      let url = note.url;
+    const withUrls = await Promise.all(
+      notes.map(async (note) => {
+        let url = note.url;
 
-      // If URL is a Supabase path (doesn't start with http:// or https://)
-      if (url && !url.startsWith('http')) {
-        try {
-          url = await this.supabaseService.getSignedUrl(url, 300); // 5 minutes
-        } catch (err) {
-          this.logger.error(`Failed to sign URL for ${url}: ${err.message}`);
+        // If URL is a Supabase path (doesn't start with http:// or https://)
+        if (url && !url.startsWith('http')) {
+          try {
+            url = await this.supabaseService.getSignedUrl(url, 300); // 5 minutes
+          } catch (err) {
+            this.logger.error(`Failed to sign URL for ${url}: ${err.message}`);
+          }
         }
-      }
 
-      return { ...note.toJSON(), url };
-    })
-  );
+        return { ...note.toJSON(), url };
+      }),
+    );
 
     return withUrls;
   }
@@ -85,10 +84,26 @@ export class VoiceNoteService {
   async remove(userId: number, id: number) {
     const note = await this.voiceNoteRepo.findByPk(id);
     if (!note) throw new NotFoundException('Voice note not found');
-    if (note.userId !== userId)
+    if (note.userId !== userId) {
       throw new ForbiddenException('Not allowed to delete');
+    }
 
+    // remove file from Supabase storage
+    await this.supabaseService.deleteVoiceNote(note.url);
+
+    // remove DB record
     await note.destroy();
+
     return { message: 'Voice note deleted' };
   }
+
+  // async remove(userId: number, id: number) {
+  //   const note = await this.voiceNoteRepo.findByPk(id);
+  //   if (!note) throw new NotFoundException('Voice note not found');
+  //   if (note.userId !== userId)
+  //     throw new ForbiddenException('Not allowed to delete');
+
+  //   await note.destroy();
+  //   return { message: 'Voice note deleted' };
+  // }
 }

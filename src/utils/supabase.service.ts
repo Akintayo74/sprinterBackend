@@ -38,4 +38,17 @@ export class SupabaseService {
     if (error) throw new Error(`Supabase signed URL error: ${error.message}`);
     return data.signedUrl;
   }
+
+  async deleteVoiceNote(filePath: string): Promise<void> {
+  const { error } = await this.supabase
+    .storage
+    .from('voice-notes')
+    .remove([filePath]); // filePath should be like "voicenotes/filename.mp3"
+
+  if (error) {
+    // this.logger.error('Supabase delete error:', error.message);
+    throw new Error(`Supabase delete error: ${error.message}`);
+  }
+}
+
 }
