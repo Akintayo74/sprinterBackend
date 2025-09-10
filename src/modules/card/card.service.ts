@@ -8,7 +8,7 @@ import { User } from 'src/models/user.model';
 import { CreateCardDto } from './dto/create-card.dto';
 import { UpdateCardDto } from './dto/update-card.dto';
 import { UpdateChecklistDto } from './dto/update-checklist.dto';
-import { CreateCommentDto } from '../board/dto/create-comment.dto';
+import { CreateCommentDto } from './dto/create-comment.dto';
 
 @Injectable()
 export class CardService {
@@ -90,6 +90,8 @@ export class CardService {
   }
 
   async updateChecklistItem(userId: number, cardId: number, dto: UpdateChecklistDto) {
+    console.log("In update checklist item"); 
+
     const card = await this.cardModel.findByPk(cardId);
     if (!card) throw new NotFoundException('Card not found');
 
@@ -190,5 +192,24 @@ export class CardService {
     });
   }
 
+  async updateComment(userId: number, commentId: number, dto: CreateCommentDto) {
+    const comment = await this.commentModel.findByPk(commentId);
+    if (!comment) throw new NotFoundException('Comment not found');
+    if (comment.userId !== userId) throw new ForbiddenException(`Not allowed, ${comment.content}, ${userId}`);
+
+    comment.content = dto.content;
+    await comment.save();
+    return comment;
+  }
+
+  
+  async remove(userId: number, commentId: number) {
+    const comment = await this.commentModel.findByPk(commentId);
+    if (!comment) throw new NotFoundException('Comment not found');
+    if (comment.userId !== userId) throw new ForbiddenException('Not allowed');
+
+    await comment.destroy();
+    return { message: 'Comment deleted' };
+  }
 
 }

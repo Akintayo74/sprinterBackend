@@ -1,6 +1,7 @@
-import { Table, Column, Model, ForeignKey, BelongsTo, DataType } from 'sequelize-typescript';
+import { Table, Column, Model, ForeignKey, BelongsTo, DataType, HasMany } from 'sequelize-typescript';
 import { List } from './list.model';
 import { Board } from './board.model';
+import { Comment } from './comment.model';
 
 @Table
 export class Card extends Model {
@@ -38,4 +39,7 @@ export class Card extends Model {
 
   @BelongsTo(() => Board)
   declare board: Board;
+
+  @HasMany(() => Comment)
+  comments: Comment[];
 }
