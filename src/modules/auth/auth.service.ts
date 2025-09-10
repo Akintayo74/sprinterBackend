@@ -120,17 +120,58 @@ export class AuthService {
   }
 
   async getUserProfile(userId: number) {
-    const user = await this.userModel.findByPk(userId);
-    if (!user) throw new BadRequestException('User not found');
-    return {
-      id: user.id,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      isVerified: user.isVerified,
-      createdAt: user.createdAt,
-    };
-  }
+      const user = await this.userModel.findByPk(userId);
+      if (!user) throw new BadRequestException('User not found');
+      return {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        isVerified: user.isVerified,
+        createdAt: user.createdAt,
+      };
+    }
+    
+    async resendVerification(email: string) {
+        const user = await this.userModel.findOne({ where: { email } });
+        if (!user) throw new BadRequestException('User not found');
+        if (user.isVerified) return { message: 'User already verified' };
+      
+        const token = this.jwtService.sign({ email }, { expiresIn: '24h' });
+        
+        const baseUrl = this.configService.get('FRONTEND_URL');
+        const verifyUrl = `${baseUrl}/verify-email?token=${token}`;
+      
+        await sendVerificationEmail(email, verifyUrl);
+        return { email, message: 'Verification email resent' };
+    }
+    
+    async sendResetPasswordLink(email: string) {
+        const user = await this.userModel.findOne({ where: { email } });
+        if (!user) throw new BadRequestException('User not found');
+      
+        const token = this.jwtService.sign({ email }, { expiresIn: '15m' });
+        const baseUrl = this.configService.get('FRONTEND_URL');
+        const resetUrl = `${baseUrl}/forgot-password/reset?token=${token}`;
+      
+        await sendPasswordResetEmail(email, resetUrl); 
+        return { message: 'Reset password link sent' };
+    }
+    
+    async resetPassword(token: string, newPassword: string) {
+        try {
+            const payload = await this.jwtService.verifyAsync(token);
+            const user = await this.userModel.findOne({ where: { email: payload.email } });
+            if (!user) throw new BadRequestException('Invalid user');
+        
+            const hash = await bcrypt.hash(newPassword, 10);
+            await user.update({ password: hash });
+        
+            return { message: 'Password reset successful' };
+        } catch (e) {
+            throw new BadRequestException('Invalid or expired reset link');
+        }
+    }
 
   async resendVerification(email: string) {
     const user = await this.userModel.findOne({ where: { email } });
