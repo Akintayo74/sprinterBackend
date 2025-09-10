@@ -15,26 +15,28 @@ export function generateVerificationEmailHtml(verificationLink: string): string 
       margin: 0;
       padding: 0;
     ">
-      <div style="max-width: 600px; margin: 0 auto;">
-        <!-- Header -->
-        <div style="
-          background-color: #1e90ff;
-          padding: 40px 20px;
-          text-align: center;
-        ">
-          <h1 style="
-            color: white;
-            font-size: 24px;
-            font-weight: bold;
-            margin: 0 0 10px 0;
-          ">🏃‍♂️ SPRINTER</h1>
-          <p style="
-            color: white;
-            font-size: 18px;
-            margin: 0;
-          ">Verify your email address</p>
-        </div>
 
+      <!-- Header -->
+      <div style="
+        background-color: #1e90ff;
+        padding: 40px 0px;
+        text-align: center;
+        width: 100%
+      ">
+        <h1 style="
+          color: white;
+          font-size: 24px;
+          font-weight: bold;
+          margin: 0 0 10px 0;
+        ">🏃🏻‍♀️‍➡️ <i>SPRINTER</h1>
+        <p style="
+          color: white;
+          font-size: 18px;
+          margin: 0;
+        ">Verify your email address</p>
+      </div>
+
+      <div style="max-width: 600px; margin: 0 auto;">
         <!-- Main Content -->
         <div style="
           background-color: #2d2d2d;
@@ -153,26 +155,28 @@ export function generatePasswordResetEmailHtml(resetLink: string): string {
       margin: 0;
       padding: 0;
     ">
-      <div style="max-width: 600px; margin: 0 auto;">
-        <!-- Header -->
-        <div style="
-          background-color: #1e90ff;
-          padding: 40px 20px;
-          text-align: center;
-        ">
-          <h1 style="
-            color: white;
-            font-size: 24px;
-            font-weight: bold;
-            margin: 0 0 10px 0;
-          ">🏃‍♂️ SPRINTER</h1>
-          <p style="
-            color: white;
-            font-size: 18px;
-            margin: 0;
-          ">Reset Your Password</p>
-        </div>
 
+      <!-- Header -->
+      <div style="
+        background-color: #1e90ff;
+        padding: 40px 0px;
+        text-align: center;
+        width: 100%
+      ">
+        <h1 style="
+          color: white;
+          font-size: 24px;
+          font-weight: bold;
+          margin: 0 0 10px 0;
+        ">🏃🏻‍♀️‍➡️ <i>SPRINTER</h1>
+        <p style="
+          color: white;
+          font-size: 18px;
+          margin: 0;
+        ">Reset Your Password</p>
+      </div>
+
+      <div style="max-width: 600px; margin: 0 auto;">
         <!-- Main Content -->
         <div style="
           background-color: #2d2d2d;
