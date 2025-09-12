@@ -172,47 +172,4 @@ export class AuthService {
             throw new BadRequestException('Invalid or expired reset link');
         }
     }
-
-  async resendVerification(email: string) {
-    const user = await this.userModel.findOne({ where: { email } });
-    if (!user) throw new BadRequestException('User not found');
-    if (user.isVerified) return { message: 'User already verified' };
-
-    const token = this.jwtService.sign({ email }, { expiresIn: '24h' });
-
-    const baseUrl = this.configService.get(FRONT_OR_BACK);
-    const verifyUrl = `${baseUrl}/verify-email?token=${token}`;
-
-    await sendVerificationEmail(email, verifyUrl);
-    return { email, message: 'Verification email resent' };
-  }
-
-  async sendResetPasswordLink(email: string) {
-    const user = await this.userModel.findOne({ where: { email } });
-    if (!user) throw new BadRequestException('User not found');
-
-    const token = this.jwtService.sign({ email }, { expiresIn: '15m' });
-    const baseUrl = this.configService.get(FRONT_OR_BACK);
-    const resetUrl = `${baseUrl}/auth/reset-password?token=${token}`;
-
-    await sendPasswordResetEmail(email, resetUrl);
-    return { message: 'Reset password link sent' };
-  }
-
-  async resetPassword(token: string, newPassword: string) {
-    try {
-      const payload = await this.jwtService.verifyAsync(token);
-      const user = await this.userModel.findOne({
-        where: { email: payload.email },
-      });
-      if (!user) throw new BadRequestException('Invalid user');
-
-      const hash = await bcrypt.hash(newPassword, 10);
-      await user.update({ password: hash });
-
-      return { message: 'Password reset successful' };
-    } catch (e) {
-      throw new BadRequestException('Invalid or expired reset link');
-    }
-  }
 }
